@@ -1,12 +1,9 @@
-package com.bookstore.server
+package com.bookstore.server.httphandlerfactory
 
 import java.io.OutputStream
 
+import com.bookstore.server.{BookController}
 import com.sun.net.httpserver.{HttpExchange, HttpHandler}
-import net.liftweb.json.JsonAST._
-import net.liftweb.json.Extraction._
-import scala.collection.JavaConverters._
-
 
 class BooksHandler extends HttpHandler {
 
@@ -17,7 +14,7 @@ class BooksHandler extends HttpHandler {
 
     httpMethod match {
       // example endpoint url - http://localhost:9090/bookstore/books
-      case "get" => response = getBooks()
+      case "get" => response = BookController.getBooks()
     }
 
     httpExchange.sendResponseHeaders(200, response.length)
@@ -27,12 +24,5 @@ class BooksHandler extends HttpHandler {
 
   }
 
-  // get all books
-  def getBooks(): String = {
-    implicit val formats = net.liftweb.json.DefaultFormats
-    var response = compactRender(decompose(BookStoreServer.bookList.asScala))
-
-    return response
-  }
 
 }
